@@ -37,6 +37,12 @@ $routes->set404Override();
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
 
+$routes->group('tdx', static function($routes) {
+    $routes->cli('auth', 'TDXDataController::getAuthObject');
+});
+$routes->cli('tdx/auth', 'TDXDataController::getAccessToken');
+$routes->cli('tdx/data/cities', 'TDXDataController::getCities');
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

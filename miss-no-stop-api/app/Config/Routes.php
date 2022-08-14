@@ -35,7 +35,10 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Home::index');
+$routes->get('/api/metro/city', 'ApiController::get_metro_cities');
+$routes->get('/api/metro/city/(:num)', 'ApiController::get_metro_routes/$1');
+$routes->get('/api/metro/city/(:num)/route/(:alphanum)', 'ApiController::get_metro_stations/$1/$2');
+$routes->get('/api/metro/city/(:num)/station/(:alphanum)/end-station/(:alphanum)', 'ApiController::get_metro_arrivals/$1/$2/$3');
 
 /*
  * --------------------------------------------------------------------

@@ -18,7 +18,7 @@ class CreateAllTables extends Migration
         $citiesField = [
             "C_id" => [
                 "type"       => "VARCHAR",
-                "constraint" => 5
+                "constraint" => 3
             ],
             "C_name_TC" => [
                 "type"       => "VARCHAR",

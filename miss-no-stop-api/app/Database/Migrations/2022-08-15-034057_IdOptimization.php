@@ -23,7 +23,7 @@ class IdOptimization extends Migration
         $fields = [
             "MS_id" => [
                 "type"       => "VARCHAR",
-                "constraint" => 12
+                "constraint" => 10
             ],
             "MS_name_TC" => [
                 "type"       => "VARCHAR",
@@ -35,7 +35,7 @@ class IdOptimization extends Migration
             ],
             "MS_city_id" => [
                 "type"       => "VARCHAR",
-                "constraint" => 5
+                "constraint" => 3
             ],
             "MS_longitude" => [
                 "type"       => "FLOAT"
@@ -52,8 +52,8 @@ class IdOptimization extends Migration
         // 捷運路線
         $fields = [
             "MR_id" => [
-                "type"       => "SMALLINT",
-                "auto_increment" => true
+                "type"       => "VARCHAR",
+                "constraint" => 10
             ],
             "MR_name_TC" => [
                 "type"       => "VARCHAR",
@@ -72,11 +72,11 @@ class IdOptimization extends Migration
         $fields = [
             "MD_station_id" => [
                 "type"       => "VARCHAR",
-                "constraint" => 12
+                "constraint" => 10
             ],
             "MD_end_station_id" => [
                 "type"       => "VARCHAR",
-                "constraint" => 12
+                "constraint" => 10
             ],
             "MD_duration" => [
                 "type"       => "TINYINT"
@@ -92,11 +92,11 @@ class IdOptimization extends Migration
         $fields = [
             "MA_station_id" => [
                 "type"       => "VARCHAR",
-                "constraint" => 12
+                "constraint" => 10
             ],
             "MA_end_station_id" => [
                 "type"       => "VARCHAR",
-                "constraint" => 12
+                "constraint" => 10
             ],
             "MA_sequence" => [
                 "type"       => "TINYINT"
@@ -118,10 +118,11 @@ class IdOptimization extends Migration
         $fields = [
             "MRS_station_id" => [
                 "type"       => "VARCHAR",
-                "constraint" => 12
+                "constraint" => 10
             ],
             "MRS_route_id" => [
-                "type"       => "SMALLINT"
+                "type"       => "VARCHAR",
+                "constraint" => 10
             ]
         ];
         $this->forge->addField($fields);

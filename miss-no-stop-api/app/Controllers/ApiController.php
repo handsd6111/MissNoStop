@@ -89,7 +89,7 @@ class ApiController extends BaseController
             ];
             $vRules = [
                 "cityId"  => "exact_length[5]",
-                "routeId" => "alpha_numeric|exact_length[5]"
+                "routeId" => "numeric"
             ];
 
             // 如果 GET 資料驗證失敗則回傳錯誤訊息
@@ -127,8 +127,8 @@ class ApiController extends BaseController
             ];
             $vRules = [
                 "cityId"       => "exact_length[5]",
-                "stationId"    => "alpha_numeric",
-                "endStationId" => "alpha_numeric"
+                "stationId"    => "alpha_numeric_punct",
+                "endStationId" => "alpha_numeric_punct"
             ];
             
             // 如果 GET 資料驗證失敗則回傳錯誤訊息

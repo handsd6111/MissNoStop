@@ -25,9 +25,11 @@ class MetroModel extends BaseModel
         try
         {
             $condition = [
-                "MR_city_id" => $cityId
+                "MS_city_id" => $cityId
             ];
             return $this->db->table("metro_routes")
+                            ->join("metro_route_stations", "MR_id = MRS_route_id")
+                            ->join("metro_stations", "MRS_station_id = MS_id")
                             ->select("MR_id, MR_name_TC, MR_name_EN")
                             ->where($condition)
                             ->orderBy("MR_id");
@@ -54,7 +56,7 @@ class MetroModel extends BaseModel
                 "MRS_route_id" => $routeId
             ];
             return $this->db->table("metro_stations")
-                            ->join("metro_route_stations", "MS_id = MRS_station_id", "left")
+                            ->join("metro_route_stations", "MS_id = MRS_station_id")
                             ->select("MS_id, MS_name_TC, MS_name_EN, MS_longitude, MS_latitude")
                             ->where($condition)
                             ->orderBy("MS_id");
@@ -75,11 +77,12 @@ class MetroModel extends BaseModel
         try
         {
             $condition = [
-                "Ma_city_id"        => $cityId,
+                "MS_city_id"        => $cityId,
                 "MA_station_id"     => $stationId,
                 "MA_end_station_id" => $endStationId
             ];
             return $this->db->table("metro_arrivals")
+                            ->join("metro_stations", "MD_station_id = MS_id")
                             ->select("MA_sequence, MA_arrival_time, MA_departure_time")
                             ->where($condition)
                             ->orderBy("MA_sequence");

@@ -14,8 +14,6 @@ class CreateAllTables extends Migration
     // 建立資料表並賦予屬性
     function up()
     {
-        $this->forge->createDatabase('miss_no_stop_db', true);
-
         // 縣市資料表
         $citiesField = [
             "C_id" => [
@@ -91,7 +89,7 @@ class CreateAllTables extends Migration
         // 鐵路路線
         $railwayRoutesField = [
             "RR_id" => [
-                "type" => "VARCHAR",
+                "type"       => "VARCHAR",
                 "constraint" => 5
             ],
             "RR_name_TC" => [
@@ -226,7 +224,8 @@ class CreateAllTables extends Migration
         ];
         $this->forge->addField($metroDurationsField);
         $this->forge->addPrimaryKey(["MD_station_id", "MD_end_station_id"]);
-        $this->forge->addForeignKey(["MD_station_id", "MD_end_station_id"], "metro_stations", ["MS_id", "MS_id"], "CASCADE", "CASCADE");
+        $this->forge->addForeignKey("MD_station_id", "metro_stations", "MS_id", "CASCADE", "CASCADE");
+        $this->forge->addForeignKey("MD_end_station_id", "metro_stations", "MS_id", "CASCADE", "CASCADE");
         $this->forge->addForeignKey("MD_city_id", "cities", "C_id", "CASCADE", "CASCADE");
         $this->forge->createTable("metro_durations", true);
         unset($metroDurationsField);
@@ -257,7 +256,8 @@ class CreateAllTables extends Migration
         ];
         $this->forge->addField($metroArrivalsField);
         $this->forge->addPrimaryKey(["MA_station_id", "MA_end_station_id"]);
-        $this->forge->addForeignKey(["MA_station_id", "MA_end_station_id"], "metro_stations", ["MS_id", "MS_id"], "CASCADE", "CASCADE");
+        $this->forge->addForeignKey("MA_station_id", "metro_stations", "MS_id", "CASCADE", "CASCADE");
+        $this->forge->addForeignKey("MA_end_station_id", "metro_stations", "MS_id", "CASCADE", "CASCADE");
         $this->forge->addForeignKey("MA_city_id", "cities", "C_id", "CASCADE", "CASCADE");
         $this->forge->createTable("metro_arrivals", true);
         unset($metroArrivalsField);

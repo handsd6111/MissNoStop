@@ -37,11 +37,19 @@ $routes->set404Override();
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
 
-$routes->group('tdx', static function($routes) {
-    $routes->cli('auth', 'TDXDataController::getAuthObject');
+$routes->group('tdx', static function ($routes) {
+    $routes->cli('auth', 'TDXAuthController::getAndSetAuthObject');
+
+    $routes->group('data', static function ($routes) {
+        $routes->cli('cities', 'TDXDataController::getAndSetCities');
+
+        $routes->group('metro', static function ($routes) {
+            $routes->cli('station', 'TDXDataController::getAndSetMetroStation');
+            $routes->cli('route/(:alphanum)', 'TDXDataController::getAndSetMetroRoute/$1');
+        });
+    });
 });
-$routes->cli('tdx/auth', 'TDXDataController::getAccessToken');
-$routes->cli('tdx/data/cities', 'TDXDataController::getCities');
+
 
 /*
  * --------------------------------------------------------------------

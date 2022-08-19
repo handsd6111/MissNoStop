@@ -71,7 +71,7 @@ class ApiController extends BaseController
             // 如果 GET 資料驗證失敗則回傳錯誤訊息
             if (!$this->validateData($vData, $vRules))
             {
-                return $this->send_response((array) $this->validator->getErrors(), 400, "Validation error");
+                return $this->send_response((array) $this->validator->getErrors(), 400, lang("Validation.validation_error"));
             }
 
             // 查詢成功
@@ -102,13 +102,13 @@ class ApiController extends BaseController
             ];
             $vRules = [
                 "systemId" => "alpha|max_length[7]",
-                "routeId"  => "max_length[10]"
+                "routeId"  => "alpha_numeric_punct|max_length[10]"
             ];
 
             // 如果 GET 資料驗證失敗則回傳錯誤訊息
             if (!$this->validateData($vData, $vRules))
             {
-                return $this->send_response((array) $this->validator->getErrors(), 400, "Validation error");
+                return $this->send_response((array) $this->validator->getErrors(), 400, lang("Validation.validation_error"));
             }
             
             // 查詢成功
@@ -145,7 +145,7 @@ class ApiController extends BaseController
             // 如果 GET 資料驗證失敗則回傳錯誤訊息
             if (!$this->validateData($vData, $vRules))
             {
-                return $this->send_response((array) $this->validator->getErrors(), 400, "Validation error");
+                return $this->send_response((array) $this->validator->getErrors(), 400, lang("Validation.validation_error"));
             }
 
             $response = $this->fakeModel->get_arrivals($stationId, $endStationId);
@@ -171,14 +171,5 @@ class ApiController extends BaseController
             log_message("critical", $e->getMessage());
             return $this->send_response([], 500, "Exception error");
         }
-    }
-
-    function test()
-    {
-        $nowTime = explode(":", date("h:i"));
-        $nowMinutes = intval($nowTime[0]) * 60 + intval($nowTime[1]);
-
-
-        return "$nowMinutes";
     }
 }

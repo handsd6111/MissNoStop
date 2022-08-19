@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Models\BaseModel;
+use App\Models\FakeModel;
 use App\Models\MetroModel;
 use Exception;
 
@@ -9,7 +11,9 @@ class ApiController extends BaseController
 {
     function __construct()
     {
+        // $this->baseModel = new BaseModel();
         // $this->metroModel = new MetroModel();
+        $this->fakeModel = new FakeModel();
     }
 
     /**
@@ -20,17 +24,7 @@ class ApiController extends BaseController
     {
         try
         {
-            // 如果資料查詢失敗則回傳錯誤訊息
-            if (!$query = $this->metroModel->get_cities())
-            {
-                $data = [
-                    "database" => "Failed to query from the database."
-                ];
-                return $this->send_response($data, 500, "Database error");
-            }
-
-            // 查詢成功
-            return $this->send_response($query->get());
+            return $this->send_response($this->baseModel->get_cities()->get());
         }
         catch (Exception $e)
         {
@@ -40,30 +34,49 @@ class ApiController extends BaseController
     }
 
     /**
-     * 捷運：取得指定縣市的所有路線
-     * @param string $cityId 縣市代碼
+     * 捷運：取得所有捷運系統資料
+     * @return array 捷運系統資料
+     */
+    function get_metro_systems()
+    {
+        try
+        {
+            return $this->send_response($this->fakeModel->get_systems());
+            // return $this->send_response($this->metroModel->get_metro_systems()->get());
+        }
+        catch (Exception $e)
+        {
+            log_message("critical", $e->getMessage());
+            return $this->send_response([], 500, "Exception error");
+        }
+    }
+
+    /**
+     * 捷運：取得指定捷運系統的所有路線
+     * @param string $systemId 捷運系統
      * @return array 路線資料陣列
      */
-    function get_metro_routes($cityId)
+    function get_metro_routes($systemId)
     {
         try
         {
             // 設定 GET 資料驗證格式
             $vData = [
-                "cityId" => $cityId
+                "systemId" => $systemId
             ];
             $vRules = [
-                "cityId" => "exact_length[5]"
+                "systemId" => "alpha|max_length[7]"
             ];
 
             // 如果 GET 資料驗證失敗則回傳錯誤訊息
             if (!$this->validateData($vData, $vRules))
             {
-                return $this->send_response((array)$this->validator->getErrors(), 400, "Validation error");
+                return $this->send_response((array) $this->validator->getErrors(), 400, "Validation error");
             }
 
             // 查詢成功
-            return $this->send_response($this->metroModel->get_routes($cityId)->get());
+            return $this->send_response($this->fakeModel->get_routes($systemId));
+            // return $this->send_response($this->metroModel->get_routes($cityId)->get());
         }
         catch (Exception $e)
         {
@@ -73,33 +86,34 @@ class ApiController extends BaseController
     }
 
     /**
-     * 捷運：取得指定縣市及路線的所有車站
-     * @param string $cityId 縣市代碼
+     * 捷運：取得指定捷運系統及路線的所有車站
+     * @param string $systemId 捷運系統代碼
      * @param string $routeId 路線代碼
      * @return array 車站資料陣列
      */
-    function get_metro_stations($cityId, $routeId)
+    function get_metro_stations($systemId, $routeId)
     {
         try
         {
             // 設定 GET 資料驗證格式
             $vData = [
-                "cityId"  => $cityId,
-                "routeId" => $routeId
+                "systemId" => $systemId,
+                "routeId"  => $routeId
             ];
             $vRules = [
-                "cityId"  => "exact_length[5]",
-                "routeId" => "alpha_numeric|exact_length[5]"
+                "systemId" => "alpha|max_length[7]",
+                "routeId"  => "max_length[10]"
             ];
 
             // 如果 GET 資料驗證失敗則回傳錯誤訊息
             if (!$this->validateData($vData, $vRules))
             {
-                return $this->send_response((array)$this->validator->getErrors(), 400, "Validation error");
+                return $this->send_response((array) $this->validator->getErrors(), 400, "Validation error");
             }
             
             // 查詢成功
-            return $this->send_response($this->metroModel->get_stations($cityId, $routeId)->get());
+            return $this->send_response($this->fakeModel->get_stations($systemId, $routeId));
+            // return $this->send_response($this->metroModel->get_stations($systemId, $routeId)->get());
         }
         catch (Exception $e)
         {
@@ -109,41 +123,62 @@ class ApiController extends BaseController
     }
 
     /**
-     * 捷運：取得指定縣市、車站及終點車站方向的時刻表
-     * @param string $cityId 縣市代碼
+     * 捷運：取得指定車站及終點車站的時刻表
      * @param string $stationId 車站代碼
      * @param string $endStationId 終點車站代碼（用於表示運行方向）
      * @return array 時刻表資料陣列
      */
-    function get_metro_arrivals($cityId, $stationId, $endStationId)
+    function get_metro_arrivals($stationId, $endStationId)
     {
         try
         {
             // 設定 GET 資料驗證格式
             $vData = [
-                "cityId"       => $cityId,
                 "stationId"    => $stationId,
                 "endStationId" => $endStationId
             ];
             $vRules = [
-                "cityId"       => "exact_length[5]",
-                "stationId"    => "alpha_numeric",
-                "endStationId" => "alpha_numeric"
+                "stationId"    => "alpha_numeric_punct|max_length[7]",
+                "endStationId" => "alpha_numeric_punct|max_length[7]"
             ];
             
             // 如果 GET 資料驗證失敗則回傳錯誤訊息
             if (!$this->validateData($vData, $vRules))
             {
-                return $this->send_response((array)$this->validator->getErrors(), 400, "Validation error");
+                return $this->send_response((array) $this->validator->getErrors(), 400, "Validation error");
+            }
+
+            $response = $this->fakeModel->get_arrivals($stationId, $endStationId);
+            // $response = $this->metroModel->get_arrivals($stationId, $endStationId)->get();
+
+            // 取得當前時間
+            $nowTime   = explode(":", date("H:i"));
+            $nowMinute = intval($nowTime[0]) * 60 + intval($nowTime[1]);
+
+            // 將剩餘時間寫入回傳資料陣列
+            for ($i = 0; $i < sizeof($response); $i++)
+            {
+                $arrivalTime   = explode(":", $response[$i]["MA_arrival_time"]);
+                $arrivalMinute = intval($arrivalTime[0]) * 60 + intval($arrivalTime[1]);
+                $response[$i]["MA_remain_time"] = $arrivalMinute - $nowMinute;
             }
 
             // 查詢成功
-            return $this->metroModel->get_arrivals($cityId, $stationId, $endStationId)->get();
+            return $this->send_response($response);
         }
         catch (Exception $e)
         {
             log_message("critical", $e->getMessage());
             return $this->send_response([], 500, "Exception error");
         }
+    }
+
+    function test()
+    {
+        $nowTime = explode(":", date("h:i"));
+        $nowMinutes = intval($nowTime[0]) * 60 + intval($nowTime[1]);
+
+
+        return "$nowMinutes";
     }
 }

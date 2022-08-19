@@ -35,10 +35,16 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/api/metro/city', 'ApiController::get_metro_cities');
-$routes->get('/api/metro/city/(:num)', 'ApiController::get_metro_routes/$1');
-$routes->get('/api/metro/city/(:num)/route/(:alphanum)', 'ApiController::get_metro_stations/$1/$2');
-$routes->get('/api/metro/city/(:num)/station/(:alphanum)/end-station/(:alphanum)', 'ApiController::get_metro_arrivals/$1/$2/$3');
+// 測試用
+$routes->get('/test', 'ApiController::test');
+// 取得所有捷運系統
+$routes->get('/api/metro/system', 'ApiController::get_metro_systems');
+// 取得指定捷運系統上的所有路線
+$routes->get('/api/metro/system/(:alpha)', 'ApiController::get_metro_routes/$1');
+// 取得指定捷運系統及路線上的所有車站
+$routes->get('/api/metro/system/(:alpha)/route/(:segment)', 'ApiController::get_metro_stations/$1/$2');
+// 取得指定車站及終點車站方向的時刻表
+$routes->get('/api/metro/arrival/station/(:segment)/end-station/(:segment)', 'ApiController::get_metro_arrivals/$1/$2');
 
 /*
  * --------------------------------------------------------------------

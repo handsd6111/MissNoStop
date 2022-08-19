@@ -47,8 +47,11 @@ class MetroModel extends BaseModel
                 "MR_system_id" => $systemId
             ];
             return $this->db->table("metro_routes")
+                            ->join("metro_route_stations", "MR_id = MRS_route_id")
+                            ->join("metro_stations", "MRS_station_id = MS_id")
                             ->select("MR_id, MR_name_TC, MR_name_EN")
                             ->where($condition)
+                            ->limit(1)
                             ->orderBy("MR_id");
         }
         catch (Exception $e)
@@ -100,6 +103,7 @@ class MetroModel extends BaseModel
                 "MA_end_station_id" => $endStationId
             ];
             return $this->db->table("metro_arrivals")
+                            ->join("metro_stations", "MA_station_id = MS_id")
                             ->select("MA_sequence, MA_arrival_time, MA_departure_time")
                             ->where($condition)
                             ->orderBy("MA_sequence");

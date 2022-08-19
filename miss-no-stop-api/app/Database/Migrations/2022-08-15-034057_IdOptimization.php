@@ -49,6 +49,25 @@ class IdOptimization extends Migration
         $this->forge->addForeignKey("MS_city_id", "cities", "C_id", "CASCADE", "CASCADE");
         $this->forge->createTable("metro_stations", true);
 
+        //捷運系統
+        $fields = [
+            "MST_id" => [
+                "type"       => "VARCHAR",
+                "constraint" => 4
+            ],
+            "MST_name_TC" => [
+                "type"       => "VARCHAR",
+                "constraint" => 15
+            ],
+            "MST_name_EN" => [
+                "type"       => "VARCHAR",
+                "constraint" => 40
+            ]
+        ];
+        $this->forge->addField($fields);
+        $this->forge->addPrimaryKey("MST_id");
+        $this->forge->createTable("metro_systems", true);
+
         // 捷運路線
         $fields = [
             "MR_id" => [
@@ -62,10 +81,15 @@ class IdOptimization extends Migration
             "MR_name_EN" => [
                 "type"       => "VARCHAR",
                 "constraint" => 35
+            ],
+            "MR_system_id" => [
+                "type"       => "VARCHAR",
+                "constraint" => 4
             ]
         ];
         $this->forge->addField($fields);
         $this->forge->addPrimaryKey("MR_id");
+        $this->forge->addForeignKey("MR_system_id", "metro_systems", "MST_id", "CASCADE", "CASCADE");
         $this->forge->createTable("metro_routes", true);
 
         // 捷運站間運行時間
@@ -193,6 +217,7 @@ class IdOptimization extends Migration
         $this->forge->dropTable("metro_arrivals", true. true);
         $this->forge->dropTable("metro_stations", true. true);
         $this->forge->dropTable("metro_routes", true. true);
+        $this->forge->dropTable('metro_systems', true, true);
         $this->forge->dropTable('bus_route_stations', true, true);
     }
 }

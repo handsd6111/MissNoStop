@@ -7,8 +7,8 @@ use CodeIgniter\Model;
 class MetroStationModel extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'metrostations';
-    protected $primaryKey       = 'id';
+    protected $table            = 'metro_stations';
+    protected $primaryKey       = 'MS_id';
     protected $useAutoIncrement = false;
     protected $insertID         = 0;
     protected $returnType       = 'array';

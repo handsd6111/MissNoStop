@@ -13,17 +13,22 @@ class TDXBaseController extends BaseController
         return TDXAuth::getAuthObject()->access_token;
     }
 
-    protected function curlGet($url, $accessToken)
-    {
+    protected function curlGet(
+        $url,
+        $accessToken,
+        $headers = [
+            'accept' => 'application/json',
+            'authorization' => 'Bearer '
+        ]
+    ) {
+
+        $headers['authorization'] .= $accessToken;
         $client = CS::curlrequest(); // 建立CURL instance
         $response = $client->request(
             'GET', // method
             $url, // url
             [
-                'headers' => [
-                    'accept' => 'application/json',
-                    'authorization' => 'Bearer ' . $accessToken
-                ],
+                'headers' => $headers
             ] // option
         );
 

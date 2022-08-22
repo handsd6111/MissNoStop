@@ -38,14 +38,15 @@ $routes->set404Override();
 $routes->get('/', 'Home::index');
 
 $routes->group('tdx', static function ($routes) {
-    $routes->cli('auth', 'TDXAuthController::getAndSetAuthObject');
-
+    // $routes->cli('auth', 'TDXAuthController::getAndSetAuthObject');
     $routes->group('data', static function ($routes) {
         $routes->cli('cities', 'TDXDataController::getAndSetCities');
 
         $routes->group('metro', static function ($routes) {
-            $routes->cli('station', 'TDXDataController::getAndSetMetroStation');
+            $routes->cli('station/(:alphanum)', 'TDXDataController::getAndSetMetroStation/$1');
             $routes->cli('route/(:alphanum)', 'TDXDataController::getAndSetMetroRoute/$1');
+            $routes->cli('duration/TYMC', 'TDXDataController::getAndSetMetroDurationForTYMC');
+            $routes->cli('duration/(:alphanum)', 'TDXDataController::getAndSetMetroDuration/$1');
         });
     });
 });

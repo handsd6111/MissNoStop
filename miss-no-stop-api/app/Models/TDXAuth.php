@@ -15,10 +15,10 @@ class TDXAuth
 
         if ($TDXAuthObject === NULL) {
             TDXAuthController::getAndSetAuthObject();
-            return false;
-        } else {
-            return $TDXAuthObject;
+            // return false;
         }
+
+        return $TDXAuthObject;
     }
 
     public static function setAuthObject($authObject)

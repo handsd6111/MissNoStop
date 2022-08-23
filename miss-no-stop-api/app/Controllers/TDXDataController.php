@@ -142,44 +142,4 @@ class TDXDataController extends TDXBaseController
             }
         }
     }
-
-    public function getAndSetMetroDurationForTYMC()
-    {
-        $accessToken = $this->getAccessToken();
-        // $stationUrl = "https://tdx.transportdata.tw/api/basic/v2/Rail/Metro/Station/TYMC?%24format=JSON";
-        // $result = $this->curlGet($stationUrl, $accessToken);
-
-        // foreach($result as $r) {
-        //     echo $r->StationID. "\n";
-        // }
-
-        $url = "https://tdx.transportdata.tw/api/basic/v2/Rail/Metro/S2STravelTime/TYMC?%24format=JSON";
-        $result = $this->curlGet($url, $accessToken);
-
-        // $firstStation = "A1";
-        // $lastStation = "A21";
-
-        // $metroStationsForTYMC = [];
-        // for ($i = 1; $i < 21; $i++) {
-        //     $metroStationsForTYMC[] = ['FromStationID' => "A$i", 'ToStationID' => "A" . $i + 1, 'RunTime' => 0];
-        // }
-
-
-
-        // print_r($metroStationsForTYMC);
-
-        // $normalMetros = $result[0];
-        $directMetros = $result[count($result) - 1];
-
-        print_r($directMetros);
-
-
-        // foreach ($result as $value) {
-            
-        //     // $travelTimes = $value->TravelTimes;
-        //     // foreach ($travelTimes as $t) {
-                
-        //     // }
-        // }
-    }
 }

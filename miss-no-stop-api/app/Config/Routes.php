@@ -35,8 +35,6 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-// 測試用
-$routes->get('/test', 'ApiController::test');
 // 取得所有捷運系統
 $routes->get('/api/metro/system', 'ApiController::get_metro_systems');
 // 取得指定捷運系統上的所有路線

@@ -35,10 +35,29 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/api/metro/city', 'ApiController::get_metro_cities');
-$routes->get('/api/metro/city/(:num)', 'ApiController::get_metro_routes/$1');
-$routes->get('/api/metro/city/(:num)/route/(:alphanum)', 'ApiController::get_metro_stations/$1/$2');
-$routes->get('/api/metro/city/(:num)/station/(:alphanum)/end-station/(:alphanum)', 'ApiController::get_metro_arrivals/$1/$2/$3');
+// 取得所有捷運系統
+$routes->get('/api/metro/system', 'ApiController::get_metro_systems');
+// 取得指定捷運系統上的所有路線
+$routes->get('/api/metro/system/(:alpha)', 'ApiController::get_metro_routes/$1');
+// 取得指定捷運系統及路線上的所有車站
+$routes->get('/api/metro/system/(:alpha)/route/(:segment)', 'ApiController::get_metro_stations/$1/$2');
+// 取得指定車站及終點車站方向的時刻表
+$routes->get('/api/metro/arrival/station/(:segment)/end-station/(:segment)', 'ApiController::get_metro_arrivals/$1/$2');
+
+$routes->group('tdx', static function ($routes) {
+    // $routes->cli('auth', 'TDXAuthController::getAndSetAuthObject');
+    $routes->group('data', static function ($routes) {
+        $routes->cli('cities', 'TDXDataController::getAndSetCities');
+
+        $routes->group('metro', static function ($routes) {
+            $routes->cli('station/(:alphanum)', 'TDXDataController::getAndSetMetroStation/$1');
+            $routes->cli('route/(:alphanum)', 'TDXDataController::getAndSetMetroRoute/$1');
+            $routes->cli('duration/TYMC', 'TDXDataController::getAndSetMetroDurationForTYMC');
+            $routes->cli('duration/(:alphanum)', 'TDXDataController::getAndSetMetroDuration/$1');
+        });
+    });
+});
+
 
 /*
  * --------------------------------------------------------------------

@@ -65,7 +65,7 @@ class ApiController extends BaseController
                 "systemId" => $systemId
             ];
             $vRules = [
-                "systemId" => "alpha|max_length[7]"
+                "systemId" => "alpha|max_length[4]"
             ];
 
             // 如果 GET 資料驗證失敗則回傳錯誤訊息
@@ -101,8 +101,8 @@ class ApiController extends BaseController
                 "routeId"  => $routeId
             ];
             $vRules = [
-                "systemId" => "alpha|max_length[7]",
-                "routeId"  => "alpha_numeric_punct|max_length[10]"
+                "systemId" => "alpha|max_length[4]",
+                "routeId"  => "max_length[12]"
             ];
 
             // 如果 GET 資料驗證失敗則回傳錯誤訊息
@@ -138,8 +138,8 @@ class ApiController extends BaseController
                 "endStationId" => $endStationId
             ];
             $vRules = [
-                "stationId"    => "alpha_numeric_punct|max_length[7]",
-                "endStationId" => "alpha_numeric_punct|max_length[7]"
+                "stationId"    => "alpha_numeric_punct|max_length[12]",
+                "endStationId" => "alpha_numeric_punct|max_length[12]"
             ];
             
             // 如果 GET 資料驗證失敗則回傳錯誤訊息

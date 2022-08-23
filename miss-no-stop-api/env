@@ -138,3 +138,7 @@
 #--------------------------------------------------------------------
 
 # curlrequest.shareOptions = true
+
+tdx.grantType = "client_credentials"
+tdx.clientId =  ""
+tdx.clientSecret = ""
